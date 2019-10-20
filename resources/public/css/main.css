@@ -1710,8 +1710,8 @@ body.on .bootstrap-datetimepicker-widget table td span.active {
 
 @font-face {
   font-family: 'Duplex Serif Web';
-  src: url('/fonts/Duplex Web Fonts/Duplex Serif Web-Bold.eot');
-  src: url('/fonts/Duplex Web Fonts/Duplex Serif Web-Bold.eot?#iefix') format('embedded-opentype'), url('/fonts/Duplex Web Fonts/Duplex Serif Web-Bold.woff2') format('woff2'), url('/fonts/Duplex Web Fonts/Duplex Serif Web-Bold.woff') format('woff');
+  src: url('/fonts/DuplexWebFonts/Duplex Serif Web-Bold.eot');
+  src: url('/fonts/DuplexWebFonts/Duplex Serif Web-Bold.eot?#iefix') format('embedded-opentype'), url('/fonts/DuplexWebFonts/DuplexSerifWeb-Bold.woff2') format('woff2'), url('/fonts/DuplexWebFonts/DuplexSerifWeb-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-stretch: normal;
@@ -1719,8 +1719,8 @@ body.on .bootstrap-datetimepicker-widget table td span.active {
 
 @font-face {
   font-family: 'Duplex Sans Web';
-  src: url('/fonts/Duplex Web Fonts/Duplex Sans Web-Bold.eot');
-  src: url('/fonts/Duplex Web Fonts/Duplex Serif Web-Bold.eot?#iefix') format('embedded-opentype'), url('/fonts/Duplex Web Fonts/Duplex Serif Web-Bold.woff2') format('woff2'), url('/fonts/Duplex Web Fonts/Duplex Serif Web-Bold.woff') format('woff');
+  src: url('/fonts/DuplexWebFonts/Duplex Sans Web-Bold.eot');
+  src: url('/fonts/DuplexWebFonts/Duplex Serif Web-Bold.eot?#iefix') format('embedded-opentype'), url('/fonts/DuplexWebFonts/DuplexSerifWeb-Bold.woff2') format('woff2'), url('/fonts/DuplexWebFonts/DuplexSerifWeb-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-stretch: normal;
@@ -1728,29 +1728,29 @@ body.on .bootstrap-datetimepicker-widget table td span.active {
 
 @font-face {
   font-family: 'Duplex Sans';
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Light.otf');
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Light.otf?#iefix') format('embedded-opentype'), url('/fonts/Duplex Sans OTF/Duplex Sans-Light.otf') format('opentype');
+  src: url('/fonts/DuplexSansOTF/DuplexSans-Light.otf');
+  src: url('/fonts/DuplexSansOTF/DuplexSans-Light.otf?#iefix') format('embedded-opentype'), url('/fonts/DuplexSansOTF/DuplexSans-Light.otf') format('opentype');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Duplex Sans';
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Regular.otf');
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Regular.otf?#iefix') format('embedded-opentype'), url('/fonts/Duplex Sans OTF/Duplex Sans-Regular.otf') format('opentype');
+  src: url('/fonts/DuplexSansOTF/Duplex Sans-Regular.otf');
+  src: url('/fonts/DuplexSansOTF/Duplex Sans-Regular.otf?#iefix') format('embedded-opentype'), url('/fonts/DuplexSansOTF/Duplex Sans-Regular.otf') format('opentype');
   font-weight: normal;
 }
 
 @font-face {
   font-family: 'Duplex Sans';
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Semibold.otf');
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Semibold.otf?#iefix') format('embedded-opentype'), url('/fonts/Duplex Sans OTF/Duplex Sans-Semibold.otf') format('opentype');
+  src: url('/fonts/DuplexSansOTF/Duplex Sans-Semibold.otf');
+  src: url('/fonts/DuplexSansOTF/Duplex Sans-Semibold.otf?#iefix') format('embedded-opentype'), url('/fonts/DuplexSansOTF/Duplex Sans-Semibold.otf') format('opentype');
   font-weight: 500;
 }
 
 @font-face {
   font-family: 'Duplex Sans';
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Bold.otf');
-  src: url('/fonts/Duplex Sans OTF/Duplex Sans-Bold.otf?#iefix') format('embedded-opentype'), url('/fonts/Duplex Sans OTF/Duplex Sans-Bold.otf') format('opentype');
+  src: url('/fonts/DuplexSansOTF/Duplex Sans-Bold.otf');
+  src: url('/fonts/DuplexSansOTF/Duplex Sans-Bold.otf?#iefix') format('embedded-opentype'), url('/fonts/DuplexSansOTF/Duplex Sans-Bold.otf') format('opentype');
   font-weight: bold;
 }
 
