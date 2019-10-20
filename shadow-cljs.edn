@@ -1,0 +1,10 @@
+{:lein         true
+ :dependencies [[cljs-http "0.1.46"]]
+ :source-paths ["src"]
+ :builds       {:app {:target     :browser
+                      :output-dir "resources/public/js"
+                      :asset-path "/js"
+                      :modules    {:app {:entries [clone.core]}}
+                      :devtools   {:after-load clone.core/mount-root}}}
+ :dev-http     {3000 {:root    "resources/public"
+                      :handler clone.handler/app}}}
