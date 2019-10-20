@@ -54,27 +54,37 @@
           (if (or (= 200 status) (and (>= status 400) (< status 500)))
             (clear-session))))))
 
+(defn fetch-data [name]
+  (go (let [response (<! (http/get
+                           (str api-url "/users/" (session/get-uuid))
+                           {:headers {"Authorization" (str "OAuth " (session/get-token))}}))]
+        (if (= 200 (:status response))
+          (reset! name (get-in response [:body :firstName]))))))
+
 (defn logout-component []
-  (fn [l?]
-    [:ksf-user-login
-     [:ul.user.logged-in
-      [:li.user-login
-       [:a {:target "_blank", :href "/"}
-        [:svg.user-icon
-         {:viewBox "0 0 17.5 15",
-          :height "15",
-          :width "17.5",
-          :preserveAspectRatio "xMidYMid"}
-         [:path.cls-1
-          {:d
-           "M15.298,11.312 C14.231,10.837 12.683,9.638 10.361,9.246 C10.947,8.604 11.407,7.632 11.867,6.476 C12.118,5.795 12.077,5.214 12.077,4.409 C12.077,3.788 12.202,2.837 12.035,2.297 C11.533,0.502 10.235,0.006 8.729,0.006 C7.202,0.006 5.905,0.502 5.403,2.297 C5.257,2.837 5.361,3.809 5.361,4.409 C5.361,5.214 5.319,5.795 5.591,6.476 C6.052,7.632 6.491,8.625 7.097,9.246 C4.796,9.658 3.227,10.858 2.182,11.312 C0.006,12.262 0.006,13.316 0.006,13.316 L0.006,15.001 L17.495,15.001 L17.495,13.316 C17.495,13.316 17.474,12.262 15.298,11.312 Z"}]]
-        " " [:span "Andrea"]]]
-      [:li.user-logout
-       [:a {:href ""
-            :on-click (fn [e]
-                        (.preventDefault e)
-                        (logout-action l?))}
-        " LOG OUT"]]]]))
+  (fn []
+    (let [name (reagent/atom "")]
+      (fetch-data name)
+      (fn [l?]
+        [:ksf-user-login
+         [:ul.user.logged-in
+          [:li.user-login
+           [:a {:target "_blank", :href "/"}
+            [:svg.user-icon
+             {:viewBox "0 0 17.5 15",
+              :height "15",
+              :width "17.5",
+              :preserveAspectRatio "xMidYMid"}
+             [:path.cls-1
+              {:d
+               "M15.298,11.312 C14.231,10.837 12.683,9.638 10.361,9.246 C10.947,8.604 11.407,7.632 11.867,6.476 C12.118,5.795 12.077,5.214 12.077,4.409 C12.077,3.788 12.202,2.837 12.035,2.297 C11.533,0.502 10.235,0.006 8.729,0.006 C7.202,0.006 5.905,0.502 5.403,2.297 C5.257,2.837 5.361,3.809 5.361,4.409 C5.361,5.214 5.319,5.795 5.591,6.476 C6.052,7.632 6.491,8.625 7.097,9.246 C4.796,9.658 3.227,10.858 2.182,11.312 C0.006,12.262 0.006,13.316 0.006,13.316 L0.006,15.001 L17.495,15.001 L17.495,13.316 C17.495,13.316 17.474,12.262 15.298,11.312 Z"}]]
+            " " [:span @name]]]
+          [:li.user-logout
+           [:a {:href ""
+                :on-click (fn [e]
+                            (.preventDefault e)
+                            (logout-action l?))}
+            " LOG OUT"]]]]))))
 
 (defn invalid-credentials-message []
   (fn []
