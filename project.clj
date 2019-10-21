@@ -31,8 +31,14 @@
   :plugins [[lein-environ "1.1.0"]
             [lein-shadow "0.1.6"]
             [lein-cljsbuild "1.1.7"]
+            [lein-npm "0.6.2"]
             [lein-asset-minifier "0.4.6"
              :exclusions [org.clojure/clojure]]]
+
+  :npm {:devDependencies [shadow-cljs "^2.8.37"]
+        :dependencies [[create-react-class "^15.6.3"]
+                       [react "^16.4.0"]
+                       [react-dom "^16.4.0"]]}
 
   :ring {:handler clone.handler/app
          :uberwar-name "clone.war"}
@@ -93,8 +99,9 @@
   :less {:source-paths ["src/less"]
          :target-path "resources/public/css"}
 
-  :aliases {"prod" ["with-profile" "dev" "run" "-m" "shadow.cljs.devtools.cli" "--npm" "release" "app"]
-            "npm" [""]}
+  :aliases {"prod" ["do"
+                    ["npm" "install"]
+                    ["with-profile" "dev" "run" "-m" "shadow.cljs.devtools.cli" "compile" "app"]]}
 
 
   :profiles {:dev {:repl-options {:init-ns clone.repl}

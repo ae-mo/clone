@@ -16,3 +16,5 @@ pom.xml.asc
 /node_modules
 /resources/public/js
 /.shadow-cljs
+/resources/public/css/critical.min.css
+/resources/public/css/main.min.css
