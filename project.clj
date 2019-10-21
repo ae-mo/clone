@@ -93,6 +93,7 @@
   :less {:source-paths ["src/less"]
          :target-path "resources/public/css"}
 
+  :aliases {"prod" ["with-profile" "dev" "run" "-m" "shadow.cljs.devtools.cli" "release" "app"]}
 
   :profiles {:dev {:repl-options {:init-ns clone.repl}
                    :dependencies [[cider/piggieback "0.4.1"]
@@ -121,7 +122,7 @@
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
                        :source-paths ["env/prod/clj"]
-                       :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
+                       :prep-tasks ["compile" ["prod"]]
                        :env {:production true}
                        :aot :all
                        :omit-source true}})
