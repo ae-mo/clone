@@ -40,6 +40,9 @@
                        [react "^16.4.0"]
                        [react-dom "^16.4.0"]]}
 
+
+
+
   :ring {:handler clone.handler/app
          :uberwar-name "clone.war"}
 
@@ -101,7 +104,7 @@
 
   :aliases {"prod" ["do"
                     ["npm" "install"]
-                    ["with-profile" "dev" "run" "-m" "shadow.cljs.devtools.cli" "compile" "app"]]}
+                    ["with-profile" "prod" "run" "-m" "shadow.cljs.devtools.cli" "compile" "app"]]}
 
 
   :profiles {:dev {:repl-options {:init-ns clone.repl}
@@ -128,6 +131,18 @@
                                 (pjstadig.humane-test-output/activate!)]
 
                    :env {:dev true}}
+
+             :prod {:repl-options {:init-ns clone.repl}
+                    :dependencies [[thheller/shadow-cljs "2.8.37"]
+
+                                   ;; To silence warnings from less4clj dependecies about missing logger implementation
+                                   [org.slf4j/slf4j-nop "1.7.25"]]
+
+                    :source-paths ["env/prod/clj"]
+                    :plugins [[deraen/lein-less4j "0.6.2"]]
+
+
+                    :env {:dev true}}
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
                        :source-paths ["env/prod/clj"]
