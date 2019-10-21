@@ -14,7 +14,7 @@ On the frontend, it uses [Reagent](https://github.com/reagent-project/reagent), 
 
 The project was developed starting from [this template](https://github.com/reagent-project/reagent-template).
 
-## Running
+## Getting started
 
 ### Requirements
 
@@ -23,44 +23,34 @@ The project was developed starting from [this template](https://github.com/reage
 - [npm](https://www.npmjs.com/) (comes bundled with `node.js`)
 - [Java SDK](https://adoptopenjdk.net/) (Version 8+)
 
-### Development mode
+### Running
 
-To start the `shadow-cljs` compiler run
+First, you need to install npm dependencies:
+
 ```
-lein run -m shadow.cljs.devtools.cli watch app
+$ lein npm install
+```
+
+Then run
+```
+lein with-profile dev run -m shadow.cljs.devtools.cli watch app
 ```
 
 The application will now be available at [http://localhost:3000](http://localhost:3000).
 
-### Style compilation
-To compile [less](https://github.com/Deraen/less4clj) sources and then watch for changes and recompile until interrupted, run
+#### Uberjar
+
+If you want you can build a standalone jar by running:
 ```
-lein less4j auto
+lein with-profile prod do clean, uberjar
 ```
 
-### Optional development tools
-
-Start the browser REPL:
-
+Then use the following command to execute it:
 ```
-$ lein repl
-```
-The Jetty server can be started by running:
-
-```clojure
-(start-server)
-```
-and stopped by running:
-```clojure
-(stop-server)
+java -cp target/clone.jar clojure.main -m clone.server
 ```
 
-
-### Building for release
-
-```
-lein do clean, uberjar
-```
+As before, the application will be available at [http://localhost:3000](http://localhost:3000).
 
 ## Architecture
 
@@ -81,7 +71,7 @@ This section documents the design choices that were adopted during development.
 Going for a SPA seemed the most natural choice, given that I needed to integrate with an external API. Also, as I thought that securing the app was out of scope (see below), I did not provide a backend, thus the API calls are performed from the client.
 
 Regarding the frontend structure, I basically created a component for each of the two pages of the app, with common header and footer components for all the pages.
-Each component has its own state, apart from shared session data. It could have probably been possible to have a flattened shared state among all the application components that would have allowed me to spare some API calls, but I just thought it wasn't worth it for a simple two-page app.
+Each component has its own state, apart from shared session data. It could have probably been possible to have a flattened shared state among all the application components that would have allowed me to spare one API call, but I just thought it wasn't worth it for a simple two-page app.
 
 For the rest, the architecture was pretty much dictated by the template I used.
 
