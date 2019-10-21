@@ -29,6 +29,7 @@
                   :exclusions [org.clojure/tools.reader]]]
 
   :plugins [[lein-environ "1.1.0"]
+            [lein-shadow "0.1.6"]
             [lein-cljsbuild "1.1.7"]
             [lein-asset-minifier "0.4.6"
              :exclusions [org.clojure/clojure]]]
