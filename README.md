@@ -1,25 +1,33 @@
-# clone
 
-This is the clone project.
 
-## Development mode
+# Clone
 
-To start the Figwheel compiler, navigate to the project folder and run the following command in the terminal:
+Clone is a small web application to manage KSF Media user profiles. It was developed following the guidelines of the [KSF Media Code Test](https://gist.github.com/f-f/d09d10d0e1b2a81cc035eb35bb00d958).
 
+## Overview
+
+It is a single page application allowing the user to login and display their profile information. In addition, the user can edit their address.
+
+It is a Clojure project, using [leiningen](https://github.com/technomancy/leiningen) and [shadow-cljs](https://github.com/thheller/shadow-cljs) as build tools.
+
+On the frontend, it uses [Reagent](https://github.com/reagent-project/reagent), a ClojureScript interface to the [React](http://facebook.github.io/react/) framework.
+
+The project was developed starting from [this template](https://github.com/reagent-project/reagent-template).
+
+## Running
+
+### Requirements
+
+- [leiningen](https://github.com/technomancy/leiningen) (v2.x)
+- [node.js](https://nodejs.org/) (v6.0.0+)
+- [npm](https://www.npmjs.com/) (comes bundled with `node.js`)
+- [Java SDK](https://adoptopenjdk.net/) (Version 8+)
+
+### Development mode
+
+To start the `shadow-cljs` compiler run
 ```
-lein figwheel
-```
-
-Figwheel will automatically push cljs changes to the browser. The server will be available at [http://localhost:3449](http://localhost:3449) once Figwheel starts up. 
-
-Figwheel also starts `nREPL` using the value of the `:nrepl-port` in the `:figwheel`
-config found in `project.clj`. By default the port is set to `7002`.
-
-The figwheel server can have unexpected behaviors in some situations such as when using
-websockets. In this case it's recommended to run a standalone instance of a web server as follows:
-
-```
-lein do clean, run
+lein run -m shadow.cljs.devtools.cli watch app
 ```
 
 The application will now be available at [http://localhost:3000](http://localhost:3000).
@@ -48,48 +56,46 @@ and stopped by running:
 ```
 
 
-## Building for release
+### Building for release
 
 ```
 lein do clean, uberjar
 ```
 
-## Deploying to Heroku
+## Architecture
 
-Make sure you have [Git](http://git-scm.com/downloads) and [Heroku toolbelt](https://toolbelt.heroku.com/) installed, then simply follow the steps below.
+The application is a single page application (SPA).
 
-Optionally, test that your application runs locally with foreman by running.
+The server supports the `/` route as the only entry point to the application (although it would be better to have a separate login page, see below).
+The relevant files for the backend part are in the `src/clj/clone` directory.
 
-```
-foreman start
-```
+The application integrates with the [Persona API](https://persona.api.ksfmedia.fi/) from KSF Media, making calls to it directly from the client. It was developed using `Reagent`.
+The relevant files for the frontend part are in the `src/cljs/clone` directory.
 
-Now, you can initialize your git repo and commit your application.
+## Tradeoffs and assumptions
 
-```
-git init
-git add .
-git commit -m "init"
-```
-create your app on Heroku
+This section documents the design choices that were adopted during development.
 
-```
-heroku create
-```
+### Architecture
 
-optionally, create a database for the application
+Going for a SPA seemed the most natural choice, given that I needed to integrate with an external API. Also, as I thought that securing the app was out of scope (see below), I did not provide a backend, thus the API calls are performed from the client.
 
-```
-heroku addons:add heroku-postgresql
-```
+Regarding the frontend structure, I basically created a component for each of the two pages of the app, with common header and footer components for all the pages.
+Each component has its own state, apart from shared session data. It could have probably been possible to have a flattened shared state among all the application components that would have allowed me to spare some API calls, but I just thought it wasn't worth it for a simple two-page app.
 
-The connection settings can be found at your [Heroku dashboard](https://dashboard.heroku.com/apps/) under the add-ons for the app.
+For the rest, the architecture was pretty much dictated by the template I used.
 
-deploy the application
+### UI
 
-```
-git push heroku master
-```
+In order to follow [KSF Media style guide](https://www.hbl.fi/styleguide-2/), I decided to use the main stylesheets from the [HBL](https://www.hbl.fi/) website as a basis. I also borrowed from [Mitt Konto](https://konto.ksfmedia.fi/).
 
-Your application should now be deployed to Heroku!
-For further instructions see the [official documentation](https://devcenter.heroku.com/articles/clojure).
+The testing on different devices was not very extensive (just on my PC, smartphone and tablet), nonetheless the application should be easily accessible in general, thanks to the reuse of HBL stylesheets.
+
+### Security
+
+Apart from checking login credentials, I basically decided to give up securing the application, as doing so would have easily led me out of scope.
+In particular:
+- the login page is in the SPA, but it would be better to have it as a separate page and serve the SPA only _after_ authentication. This is to prevent unauthorized users from accessing sensible content;
+- the access token provided by the persona API is stored in local storage, which is not recommended for a number of reasons (see [here](https://auth0.com/docs/security/store-tokens#don-t-store-tokens-in-local-storage)). There are a few solutions to this, the most popular probably being to use cookies, but they all require to do some work in the backend. This would lead to make the calls to the Persona API from the server and the overall architecture would be too much of an effort for the purpose of the app;
+- Oauth suggests to store the access token in memory when there is no backend ([source](https://auth0.com/docs/security/store-tokens#don-t-store-tokens-in-local-storage)), but I felt that this would have impaired user experience (once you close the site you have to login again), so I decided to stick to local storage;
+- The compiled jar itself does not support HTTPS, but this is not out of lazyness. In fact, it is common practice for Clojure web applications to use a separate server as a reverse proxy (see for instance [this stackoverflow question](https://stackoverflow.com/questions/24897037/clojure-compojure-ringand-https), but it is also [the approach used by heroku](https://stackoverflow.com/a/30697601)). The proxy is the one with HTTPS support. So one additional step would be to setup a reverse proxy, or one could simply deploy to a platform which automatically provides it (like I did). One could also try to provide HTTPS support from within the application, but this is not very well documented and probably less easy.
