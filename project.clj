@@ -93,7 +93,9 @@
   :less {:source-paths ["src/less"]
          :target-path "resources/public/css"}
 
-  :aliases {"prod" ["with-profile" "dev" "run" "-m" "shadow.cljs.devtools.cli" "release" "app"]}
+  :aliases {"prod" ["with-profile" "dev" "run" "-m" "shadow.cljs.devtools.cli" "--npm" "release" "app"]
+            "npm" [""]}
+
 
   :profiles {:dev {:repl-options {:init-ns clone.repl}
                    :dependencies [[cider/piggieback "0.4.1"]
