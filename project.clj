@@ -104,7 +104,7 @@
 
   :aliases {"prod" ["do"
                     ["npm" "install"]
-                    ["with-profile" "prod" "run" "-m" "shadow.cljs.devtools.cli" "compile" "app"]]}
+                    ["with-profile" "prod" "run" "-m" "shadow.cljs.devtools.cli" "release" "app"]]}
 
 
   :profiles {:dev {:repl-options {:init-ns clone.repl}

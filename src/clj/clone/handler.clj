@@ -25,8 +25,7 @@
    (head)
    [:body {:class "hbl body-container"}
     mount-target
-    (include-js "/js/app.js")
-    [:script "clone.core.init_BANG_()"]]))
+    (include-js "/js/app.js")]))
 
 
 (defn index-handler
