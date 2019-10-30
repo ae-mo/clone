@@ -10,6 +10,12 @@
 (def api-url (:api-url config))
 (def loading? (reagent/atom false))
 
+(defn generic-error-message []
+  (fn []
+    [:div.login--error-msg.pb1
+     "Something went wrong. Please try again."]))
+
+
 (defn address-form []
   (fn [s]
     [:div
@@ -71,14 +77,15 @@
                                        (restore-old-address s o)
                                        (reset! edit? false))))}]]))
 
-(defn response-handler [response success-handler]
+(defn response-handler [response success-handler error?]
   (let [status (:status response)]
     (cond
       (= 200 status) (success-handler response)
-      (and (>= status 400) (< status 500)) (clear-session))))
+      (= 403 status) (clear-session)
+      (and (>= status 400) (< status 500)) (reset! error? true))))
 
 
-(defn update-user-data [s o response]
+(defn update-user-data [s o response edit?]
   (let [{{email :email
           customer-id :cusno
           last-name :lastName
@@ -92,23 +99,24 @@
     (swap! s assoc-in [:address :street-address] street-address)
     (swap! s assoc-in [:address :postcode] postcode)
     (swap! s assoc-in [:address :country-code] country-code)
+    (reset! edit? false)
     (set-old-address s o)))
 
 
-(defn fetch-data [s o l?]
+(defn fetch-data [s o l? e?]
   (reset! l? true)
   (go (let [response (<! (http/get
                            (str api-url "/users/" (session/get-uuid))
                            {:headers {"Authorization" (str "OAuth " (session/get-token))}}))]
         (let [success-handler
               (fn []
-                (update-user-data s o response)
+                (update-user-data s o response e?)
                 (reset! l? false))]
-          (response-handler response success-handler)))))
+          (response-handler response success-handler e?)))))
 
 
 
-(defn update-address-action [s o edit?]
+(defn update-address-action [s o edit? error?]
   (reset! loading? true)
   (go (let [response (<! (http/patch
                            (str api-url "/users/" (session/get-uuid))
@@ -118,9 +126,9 @@
                                                     :streetAddress (get-in @s [:address :street-address])}}}))]
         (let [success-handler
               (fn []
-                (update-user-data s o response))]
-          (response-handler response success-handler)
-          (reset! edit? false)
+                (update-user-data s o response edit?)
+                (reset! error? false))]
+          (response-handler response success-handler error?)
           (reset! loading? false)))))
 
 
@@ -135,8 +143,9 @@
                                             :postcode nil})
           old-address (reagent/atom {:street-address nil
                                      :postcode nil})
-          edit-address? (reagent/atom false)]
-      (fetch-data user-data old-address global-loading?)
+          edit-address? (reagent/atom false)
+          generic-error? (reagent/atom false)]
+      (fetch-data user-data old-address global-loading? generic-error?)
       (fn []
         [:div.page-content.mt4.mb4.container.clearfix
           [:div.clone--container.clearfix
@@ -160,10 +169,12 @@
                  [:div.clearfix.grid--row
                   [:form.editable--form {:on-submit (fn [e]
                                                       (.preventDefault e)
-                                                      (update-address-action user-data old-address edit-address?))}
+                                                      (update-address-action user-data old-address edit-address? generic-error?))}
                    [:div.col.grid--column.col-8
+                    (if @generic-error?
+                      [generic-error-message])
                     (if @edit-address?
-                      [address-form user-data]
+                      [address-form user-data generic-error?]
                       [address-info (get-in @user-data [:address :street-address])
                                     (get-in @user-data [:address :postcode])])]
                    [:div.col.grid--column.col-4
