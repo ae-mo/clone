@@ -65,7 +65,7 @@
   (swap! o assoc :postcode  (get-in @s [:address :postcode])))
 
 (defn send-buttons []
-  (fn [s o edit?]
+  (fn [s o edit? error?]
     [:div.editable--edit-container.flex
      [:div
       [:button.button-green {:disabled @loading?
@@ -75,7 +75,8 @@
                                    (if (not @loading?)
                                      (do
                                        (restore-old-address s o)
-                                       (reset! edit? false))))}]]))
+                                       (reset! edit? false)
+                                       (reset! error? false))))}]]))
 
 (defn response-handler [response success-handler error?]
   (let [status (:status response)]
@@ -179,7 +180,7 @@
                                     (get-in @user-data [:address :postcode])])]
                    [:div.col.grid--column.col-4
                     (if @edit-address?
-                      [send-buttons user-data old-address edit-address?]
+                      [send-buttons user-data old-address edit-address? generic-error?]
                       [edit-button edit-address?])]]]]]
                [:dt "Email:"]
                [:dd
